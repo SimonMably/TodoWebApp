@@ -5,7 +5,46 @@
 {% block content %}
 
 <section>
-    <h1>TODO:app</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="form-container">
+        <h1>Add Task</h1>
+        <form method="POST" class="form">
+            {{ add_task_form.hidden_tag() }}
+
+            {{ add_task_form.user_task.label }}
+            {{ add_task_form.user_task }}
+            
+            {{ add_task_form.submit }}
+        </form>
+
+    </div>
+
+    <!-- TODO: Adding tasks now works. Displaying tasks also works. -->
+    <!-- TODO: Make task list look nice. -->
+    <div class="task-list">
+        <h4>Incomplete Tasks</h4>
+        {% for task in incomplete_tasks %}
+            {{ task.author }}: {{ task.user_task }} - Date: {{ task.published_date }}, Complete: {{ task.completed }} --- {% if current_user.id == task.author_id and task.completed != True %}<a href="{{ url_for('task_now_complete', task_id=task.id) }}">Mark as complete</a>{% endif %}
+            <hr>
+        {% endfor %}
+    </div>
+    <br><br>
+    <div class="task-list">
+        <h4>Completed Tasks</h4>
+        {% for task in completed_tasks %}
+            {{ task.author }}: {{ task.user_task }} - Date: {{ task.published_date }}, Complete: {{ task.completed }} --- {% if current_user.id == task.author_id and task.completed != True %}<a href="{{ url_for('task_now_complete', task_id=task.id) }}">Mark as complete</a>{% endif %}
+            <hr>
+        {% endfor %}
+    </div>
+
 </section>
 
 

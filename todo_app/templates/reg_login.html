@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}  TODO:app - Register / Login {% endblock %}
+
+{% block content %}
+
+<section>
+    <div class="form-container">
+        <form action="" method="post">
+        {% if register_form %}
+            <form action="" method="post">
+                {{ register_form.hidden_tag() }}
+                <h1>{{ title }}</h1>
+                {{ register_form.username.label }}
+                {{ register_form.username }}
+                <br>
+                {{ register_form.password.label }}
+                {{ register_form.password }}
+                <br>
+                <div class="reg-login-container">
+                    <p>
+                        Already have an account?
+                        <a href="{{ url_for('user_login') }}" class="btn-reg-login">Login</a>
+                    </p>
+                </div>
+                {{ register_form.submit }}
+            </form>
+
+        {% elif login_form %}
+            <form action="" method="post">
+                {{ login_form.hidden_tag() }}
+                <h1>{{ title }}</h1>
+                {{ login_form.username.label }}
+                {{ login_form.username }}
+                <br>
+                {{ login_form.password.label }}
+                {{ login_form.password }}
+                <br>
+                <div class="reg-login-container">
+                    <p>
+                        Don't have an account? 
+                        <a href="{{ url_for('register_user') }}" class="btn-reg-login">Register</a>
+                    </p>
+                </div>
+                {{ login_form.submit }}
+            </form>
+        {% endif %}
+        </form>
+    </div>
+</section>
+
+{% endblock %}

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/f9db6db651.js" crossorigin="anonymous""></script>
@@ -15,27 +15,33 @@
 </head>
 <body>
 
-    <div>
+    <nav>
         <div class="nav-brand">
             <a href="{{ url_for('homepage') }}">TODO:app</a>
+            <!-- Welcome, {{ current_user.username }} -->
         </div>
-        <ul class="nav-link">
-            <li class="nav-item">
-                <a href="#">Tasks</a>
-            </li>
-            <li class="nav-item">
-                <a href="#">Stuff</a>
-            </li>
-            <li class="nav-item">
-                <a href="#">More Stuff</a>
-            </li>
+
+        <ul class="nav-menu">
+            {% if not current_user.is_authenticated %}
+                <li class="nav-link">
+                    <a href="{{ url_for('register_user') }}">Register</a>
+                </li>
+                <li class="nav-link">
+                    <a href="{{ url_for('user_login') }}">Login</a>
+                </li>
+            {% else %}
+                <li class="nav-link">
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </li>
+            {% endif %}
         </ul>
-    </div>
-
-
-
-
+        
+        {% if current_user.is_authenticated %}
+            <div class="welcome-user">
+                <p>Welcome, {{ current_user.username }}</p>
+            </div>
+        {% endif %}
+    </nav>
     {% block content %}  {% endblock %}
-    
 </body>
 </html>
