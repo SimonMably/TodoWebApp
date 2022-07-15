@@ -1,47 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+        <!-- Styles -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
 
-    <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/f9db6db651.js" crossorigin="anonymous""></script>
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/f9db6db651.js" crossorigin="anonymous""></script>
 
-    <title>{% block title %} {% endblock %}</title>
-</head>
-<body>
-
-    <nav>
-        <div class="nav-brand">
-            <a href="{{ url_for('homepage') }}">TODO:app</a>
-            <!-- Welcome, {{ current_user.username }} -->
-        </div>
-
-        <ul class="nav-menu">
-            {% if not current_user.is_authenticated %}
-                <li class="nav-link">
-                    <a href="{{ url_for('register_user') }}">Register</a>
-                </li>
-                <li class="nav-link">
-                    <a href="{{ url_for('user_login') }}">Login</a>
-                </li>
-            {% else %}
-                <li class="nav-link">
-                    <a href="{{ url_for('logout') }}">Logout</a>
-                </li>
-            {% endif %}
-        </ul>
-        
-        {% if current_user.is_authenticated %}
-            <div class="welcome-user">
-                <p>Welcome, {{ current_user.username }}</p>
+        <title>{% block title %} {% endblock %}</title>
+    </head>
+    <body>
+        <nav>
+            <div class="nav-brand">
+                <a href="{{ url_for('homepage') }}">TODO:app</a>
+                <!-- Welcome, {{ current_user.username }} -->
             </div>
-        {% endif %}
-    </nav>
-    {% block content %}  {% endblock %}
-</body>
+
+            <ul class="nav-menu">
+                {% if not current_user.is_authenticated %}
+                    <li class="nav-link">
+                        <a href="{{ url_for('register_user') }}">Register</a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="{{ url_for('user_login') }}">Login</a>
+                    </li>
+                {% else %}
+                    <li class="nav-link">
+                        <a href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                {% endif %}
+            </ul>
+            
+            {% if current_user.is_authenticated %}
+                <div class="welcome-user">
+                    <p>Welcome, {{ current_user.username }}</p>
+                </div>
+            {% endif %}
+        </nav>
+        <div class="error-messages">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        {% block content %}  {% endblock %}
+    </body>
 </html>

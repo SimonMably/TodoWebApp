@@ -6,13 +6,7 @@
 
 <section>
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+
     
     <div class="form-container">
         <h1>Add Task</h1>
@@ -24,23 +18,29 @@
             
             {{ add_task_form.submit }}
         </form>
-
     </div>
+    <br><br>
 
     <!-- TODO: Adding tasks now works. Displaying tasks also works. -->
     <!-- TODO: Make task list look nice. -->
     <div class="task-list">
         <h4>Incomplete Tasks</h4>
         {% for task in incomplete_tasks %}
-            {{ task.author }}: {{ task.user_task }} - Date: {{ task.published_date }}, Complete: {{ task.completed }} --- {% if current_user.id == task.author_id and task.completed != True %}<a href="{{ url_for('task_now_complete', task_id=task.id) }}">Mark as complete</a>{% endif %}
+            <li>
+                User {{ task.author }}: {{ task.user_task }} - Date: {{ task.published_date }}, Complete: {{ task.completed }} --- {% if current_user.id == task.author_id and task.completed != True %}<a href="{{ url_for('task_now_complete', task_id=task.id) }}">Mark as complete</a> <a href="{{ url_for('delete_task', task_id=task.id) }}">Delete Task</a>{% endif %}
+            </li>
             <hr>
         {% endfor %}
     </div>
-    <br><br>
+
+    <br>
+    
     <div class="task-list">
         <h4>Completed Tasks</h4>
         {% for task in completed_tasks %}
-            {{ task.author }}: {{ task.user_task }} - Date: {{ task.published_date }}, Complete: {{ task.completed }} --- {% if current_user.id == task.author_id and task.completed != True %}<a href="{{ url_for('task_now_complete', task_id=task.id) }}">Mark as complete</a>{% endif %}
+            User: {{ task.author }}
+            <p>{{ task.user_task }}</p> 
+            Date: {{ task.published_date }}, Complete: {{ task.completed }} --- {% if current_user.id == task.author_id and task.completed != True %}<a href="{{ url_for('task_now_complete', task_id=task.id) }}">Mark as complete</a>{% endif %}
             <hr>
         {% endfor %}
     </div>

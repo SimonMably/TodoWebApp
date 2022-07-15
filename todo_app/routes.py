@@ -40,12 +40,19 @@ def homepage():
     incomplete_tasks = Task.query.order_by(Task.published_date.desc()).filter_by(completed=False).all()
     completed_tasks = Task.query.order_by(Task.published_date.desc()).filter_by(completed=True).all()
     
+    
     if add_task_form.validate_on_submit():
+            
+        if not current_user.is_authenticated:
+            flash("Sorry...You have to be signed in to do that!")
+            return redirect(url_for("user_login"))
+        
         new_task = Task(
             author=current_user,
             user_task=add_task_form.user_task.data,
             published_date=datetime.now().strftime("%d/%m/%Y, %I:%M:%S%p %Z")
         )
+    
         
         db.session.add(new_task)
         db.session.commit()
@@ -141,3 +148,20 @@ def task_now_complete(task_id: int):
     db.session.commit()
 
     return redirect(url_for("homepage"))
+
+
+
+@app.route("/delete-task/<int:task_id>")
+def delete_task(task_id: int):
+    """"""
+    if not current_user.is_authenticated:
+        flash("Sorry...You have to be signed in to do that!")
+        return redirect(url_for("user_login"))
+    
+    task_to_delete = Task.query.get(task_id)
+    
+    db.session.delete(task_to_delete)
+    db.session.commit()
+    
+    return redirect(url_for("homepage"))
+    
